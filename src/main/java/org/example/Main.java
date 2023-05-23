@@ -74,23 +74,23 @@ public class Main {
         //récupération d'une liste de produits achetés entre deux dates :
         System.out.println("###########");
         System.out.println("liste de produits achetés entre deux dates : ");
-        SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy");
-        Calendar c = Calendar.getInstance();
-        c.setTime(new Date());
-        c.add(Calendar.DATE, 90);
-        Date fromDate = null, toDate = null;
-        String fromDateStr = formatter.format(new Date());
-        String toDateStr = formatter.format(c.getTime());
-        try {
-            fromDate = formatter.parse(fromDateStr);
-            toDate = formatter.parse(toDateStr);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+//        SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy");
+//        Calendar c = Calendar.getInstance();
+//        c.setTime(new Date());
+//        c.add(Calendar.DATE, 90);
+//        Date fromDate = null, toDate = null;
+//        String fromDateStr = formatter.format(new Date());
+//        String toDateStr = formatter.format(c.getTime());
+//        try {
+//            fromDate = formatter.parse(fromDateStr);
+//            toDate = formatter.parse(toDateStr);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
 
         Query<Product> productQuery2 = session.createQuery("from Product as p WHERE Date BETWEEN :stDate AND :edDate  ");
-        productQuery2.setParameter("stDate", fromDate);
-        productQuery2.setParameter("edDate", toDate);
+        productQuery2.setParameter("stDate", "2015-10-10");
+        productQuery2.setParameter("edDate", "2016-11-02");
         List<Product> productList2 = productQuery2.list();
         for(Product prod: productList2){
             System.out.println(prod.getBrand());
