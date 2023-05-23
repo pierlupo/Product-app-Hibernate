@@ -3,6 +3,7 @@ package org.example.entity;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Date;
 
 
 @Entity
@@ -17,7 +18,8 @@ public class Product {
 
     private String ref;
 
-    private LocalDate Date;
+    @Temporal(TemporalType.DATE)
+    private Date Date;
 
     private Double price;
 
@@ -28,6 +30,14 @@ public class Product {
 
     public Product(String brand, Double price, int stock) {
         this.brand = brand;
+        this.price = price;
+        Stock = stock;
+    }
+
+    public Product(String brand, String ref, java.util.Date date, Double price, int stock) {
+        this.brand = brand;
+        this.ref = ref;
+        Date = date;
         this.price = price;
         Stock = stock;
     }
@@ -56,11 +66,11 @@ public class Product {
         this.ref = ref;
     }
 
-    public LocalDate getDate() {
+    public Date getDate() {
         return Date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(Date date) {
         Date = date;
     }
 
