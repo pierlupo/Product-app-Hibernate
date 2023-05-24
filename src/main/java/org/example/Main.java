@@ -19,17 +19,23 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        IHM ihm = new IHM();
-        ihm.start();
 
-        StandardServiceRegistry registre = new StandardServiceRegistryBuilder().configure().build();
-        SessionFactory sessionFactory = new MetadataSources(registre).buildMetadata().buildSessionFactory();
 
-        Session session = sessionFactory.openSession();
-        session.getTransaction().begin();
+//        IHM ihm = new IHM();
+//        ihm.start();
 
-        ProductService ps = new ProductService();
-        ps.begin();
+        //ProductService ps = new ProductService();
+
+        new IHM().start();
+
+//        StandardServiceRegistry registre = new StandardServiceRegistryBuilder().configure().build();
+//        SessionFactory sessionFactory = new MetadataSources(registre).buildMetadata().buildSessionFactory();
+//
+//        Session session = sessionFactory.openSession();
+//        session.getTransaction().begin();
+//
+//        ProductService ps = new ProductService();
+        //ps.begin();
 
           //Exo1
 //        ps.create(new Product("Toshiba", "kjfhj4e", new Date("2016/12/12"), 2010.00, 40));
@@ -168,7 +174,7 @@ public class Main {
 //            System.out.println(e.getMessage());
 //        }
 
-      ps.end();
+  //    ps.end();
         }
     }
 

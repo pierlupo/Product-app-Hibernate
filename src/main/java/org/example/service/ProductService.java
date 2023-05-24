@@ -93,7 +93,7 @@ public class ProductService extends BaseService implements Repository<Product> {
 
     public double StockValue(String brand) {
             session = sessionFactory.openSession();
-            Query<Double> query = session.createQuery("select sum(Stock)from Product where brand = :brand ");
+            Query<Double> query = session.createQuery("select sum(price)from Product where brand =:brand ");
             query.setParameter("brand", brand);
             double value = query.uniqueResult();
              session.close();

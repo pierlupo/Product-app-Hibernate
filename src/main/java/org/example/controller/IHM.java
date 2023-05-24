@@ -33,42 +33,18 @@ public class IHM {
             menu();
             choice = scanner.nextLine();
             switch (choice) {
-                case "1":
-                    getAllProducts();
-                    break;
-                case "2":
-                    getProductsFilteredByDate();
-                    break;
-                case "3":
-                    getProductsFilteredByStock();
-                    break;
-                case "4":
-                    getStockValue();
-                    break;
-                case "5":
-                    getAvgPrice();
-                    break;
-                case "6":
-                    addProduct();
-                    break;
-                case "7":
-                    getProductById();
-                    break;
-                case "8":
-                    deleteProductById();
-                    break;
-                case "9":
-                    updateProduct();
-                    break;
-                case "10":
-                    getBrandsProductList();
-                    break;
-                case "11":
-                    productStockMin();
-                    break;
-                case "12":
-                    productPriceMin();
-                    break;
+                case "1" -> getAllProducts();
+                case "2" -> getProductsFilteredByDate();
+                case "3" -> getProductsFilteredByStock();
+                case "4" -> getStockValue();
+                case "5" -> getAvgPrice();
+                case "6" -> addProduct();
+                case "7" -> getProductById();
+                case "8" -> deleteProductById();
+                case "9" -> updateProduct();
+                case "10" -> getBrandsProductList();
+                case "11" -> productStockMin();
+                case "12" -> productPriceMin();
             }
         } while (!choice.equals("0"));
         productService.end();
@@ -81,19 +57,19 @@ public class IHM {
         System.out.println("******************");
         System.out.println("Choose an option :");
         System.out.println("******************");
-        System.out.println("1 - Product List ");
-        System.out.println("2 - Product filtered by date ");
-        System.out.println("3 - Product filtered by stock ");
-        System.out.println("4 - Value of the stock of a brand ");
-        System.out.println("5 - Average price of products ");
-        System.out.println("6 - Add a new product ");
-        System.out.println("7 - Product list by brand ");
-        System.out.println("8 - Delete a product (by id)");
-        System.out.println("9 - Update a product ");
-        System.out.println("10 - Product list by brand ");
-        System.out.println("11 - Display the products with a bigger price than the one entered :");
-        System.out.println("12 - Display the products with a stock below the value entered :");
-        System.out.println("0 - Quit ");
+        System.out.println(".1  -- Product List ");
+        System.out.println(".2  -- Product filtered by date ");
+        System.out.println(".3  -- Product filtered by stock ");
+        System.out.println(".4  -- Value of the stock of a brand ");
+        System.out.println(".5  -- Average price of products ");
+        System.out.println(".6  -- Add a new product ");
+        System.out.println(".7  -- Product list by brand ");
+        System.out.println(".8  -- Delete a product (by id)");
+        System.out.println(".9  -- Update a product ");
+        System.out.println(".10 -- Product list by brand ");
+        System.out.println(".11 -- Display the products with a bigger price than the one entered :");
+        System.out.println(".12 -- Display the products with a stock below the value entered :");
+        System.out.println(".0  -- Quit ");
     }
 
        private static void getAllProducts(){
