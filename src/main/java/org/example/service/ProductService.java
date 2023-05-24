@@ -1,6 +1,8 @@
 package org.example.service;
 
 import org.example._interface.Repository;
+import org.example.entity.Comment;
+import org.example.entity.Image;
 import org.example.entity.Product;
 import org.hibernate.query.Query;
 
@@ -14,6 +16,20 @@ public class ProductService extends BaseService implements Repository<Product> {
     }
     @Override
     public boolean create(Product element) {
+        session = sessionFactory.openSession();
+        session.getTransaction().begin();
+        session.save(element);
+        session.getTransaction().commit();
+        return true;
+    }
+    public boolean create(Comment element) {
+        session = sessionFactory.openSession();
+        session.getTransaction().begin();
+        session.save(element);
+        session.getTransaction().commit();
+        return true;
+    }
+    public boolean create(Image element) {
         session = sessionFactory.openSession();
         session.getTransaction().begin();
         session.save(element);
@@ -37,6 +53,19 @@ public class ProductService extends BaseService implements Repository<Product> {
         session.delete(element);
         session.getTransaction().commit();
         return true;
+    }
+
+    public List<Product> filteredByGrade(List<Integer> grades) throws Exception{
+        if (grades.size() > 0) {
+            session = sessionFactory.openSession();
+            Query<Product> productQuery = session.createQuery(" from Comment where grade >= 4 having :grades ");
+            productQuery.setParameter("grades", grades);
+            List<Product> productList = productQuery.list();
+            session.getTransaction().commit();
+            session.close();
+            return productList;
+        }
+        throw new Exception("error");
     }
 
     @Override
@@ -137,6 +166,7 @@ public class ProductService extends BaseService implements Repository<Product> {
         }
         throw new Exception("error");
     }
+
 
     public void begin(){
 

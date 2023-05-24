@@ -1,5 +1,7 @@
 package org.example.controller;
 
+import org.example.entity.Comment;
+import org.example.entity.Image;
 import org.example.entity.Product;
 import org.example.service.ProductService;
 import org.hibernate.Session;
@@ -45,6 +47,9 @@ public class IHM {
                 case "10" -> getBrandsProductList();
                 case "11" -> productStockMin();
                 case "12" -> productPriceMin();
+                case "13" -> addImageAndCommentToProduct();
+                case "14" -> CommentProduct();
+                case "15" -> getProductsByGradeAbove4();
             }
         } while (!choice.equals("0"));
         productService.end();
@@ -57,18 +62,21 @@ public class IHM {
         System.out.println("******************");
         System.out.println("Choose an option :");
         System.out.println("******************");
-        System.out.println(".1  -- Product List ");
-        System.out.println(".2  -- Product filtered by date ");
-        System.out.println(".3  -- Product filtered by stock ");
-        System.out.println(".4  -- Value of the stock of a brand ");
-        System.out.println(".5  -- Average price of products ");
-        System.out.println(".6  -- Add a new product ");
-        System.out.println(".7  -- Product list by brand ");
-        System.out.println(".8  -- Delete a product (by id)");
-        System.out.println(".9  -- Update a product ");
-        System.out.println(".10 -- Product list by brand ");
-        System.out.println(".11 -- Display the products with a bigger price than the one entered :");
-        System.out.println(".12 -- Display the products with a stock below the value entered :");
+        System.out.println(".1  -- Product List --");
+        System.out.println(".2  -- Product filtered by date --");
+        System.out.println(".3  -- Product filtered by stock -- ");
+        System.out.println(".4  -- Value of the stock of a brand --");
+        System.out.println(".5  -- Average price of products --");
+        System.out.println(".6  -- Add a new product --");
+        System.out.println(".7  -- Product list by brand --");
+        System.out.println(".8  -- Delete a product (by id) --");
+        System.out.println(".9  -- Update a product --");
+        System.out.println(".10 -- Product list by brand --");
+        System.out.println(".11 -- Display the products with a bigger price than the one entered --");
+        System.out.println(".12 -- Display the products with a stock below the value entered --");
+        System.out.println(".13 -- Add a product with an image and a comment --");
+        System.out.println(".14 -- Comment a product --");
+        System.out.println(".15 -- Get products with a grade above 4 --");
         System.out.println(".0  -- Quit ");
     }
 
@@ -148,7 +156,6 @@ public class IHM {
 
     }
     private static void getBrandsProductList() {
-        //Example with more than one brand
         List<String> brands = new ArrayList<>();
         brands.add("HP");
         brands.add("samsung");
@@ -181,7 +188,47 @@ public class IHM {
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
+    }
 
+    private void addImageAndCommentToProduct(){
+        System.out.println("Please enter the brand : ");
+        String brand = scanner.nextLine();
+        System.out.println("Please enter the ref : ");
+        String ref = scanner.nextLine();
+        System.out.println("Please enter the date (dd/MM/yyyy) : ");
+        String dateS = scanner.nextLine();
+        System.out.println("Please enter the price : ");
+        double price = scanner.nextDouble();
+        System.out.println("Please enter the stock : ");
+        int stock = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("Please enter the url : ");
+        String url = scanner.nextLine();
+        System.out.println("Please enter the comment : ");
+        String com = scanner.nextLine();
+        try {
+            Image image = new Image();
+            image.setUri(url);
+            List<Image>images = new ArrayList<>();
+            images.add(image);
+            Comment comment = new Comment();
+            comment.setContent(com);
+            List<Comment>comments = new ArrayList<>();
+            comments.add(comment);
+            Date date = new SimpleDateFormat("dd/MM/yyyy").parse(dateS);
+            Product product = new Product();
+            image.setProduct(product);
+            product.addImage(image);
+            comment.setProduct(product);
+            product.addComment(comment);
+            if(productService.create(new Product(brand, ref, date, price, stock, images, comments))){
+                System.out.println("product added");
+            }else{
+                System.out.println("error while trying to add the product");
+            }
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 
     private void getProductById(){
@@ -190,6 +237,37 @@ public class IHM {
         scanner.nextLine();
         Product p = productService.findById(id);
         System.out.println(p);
+    }
+
+    private void CommentProduct() throws ParseException {
+        getAllProducts();
+        System.out.println("Please choose the id of the product you want to rate ");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("Please enter your comment : ");
+        String content = scanner.nextLine();
+        System.out.println("Please enter the date (dd/MM/yyyy) : ");
+        String dateC = scanner.nextLine();
+        System.out.println("Please enter the grade (from 1 to 5) : ");
+        int grade = scanner.nextInt();
+        scanner.nextLine();
+        Date date = new SimpleDateFormat("dd/MM/yyyy").parse(dateC);
+        productService.create(new Comment(content, date, grade));
+    }
+
+    private static void getProductsByGradeAbove4() {
+        List<Integer> grades = new ArrayList<>();
+        grades.add(4);
+        grades.add(5);
+        List<Product> products = null;
+        try {
+            products = productService.filteredByGrade(grades);
+            for (Product pr : products) {
+                System.out.println(pr.getId());
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
     private void deleteProductById(){
         System.out.println("Please enter the id : ");
