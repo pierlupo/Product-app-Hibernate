@@ -42,6 +42,7 @@ public class Product {
         Stock = stock;
     }
 
+
     public int getId() {
         return id;
     }

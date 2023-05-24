@@ -49,13 +49,15 @@ public class ProductService extends BaseService implements Repository<Product> {
     }
 
     public List<Product> findAll(){
+        List<Product> productList = null;
         session = sessionFactory.openSession();
         Query<Product> productQuery = session.createQuery("from Product");
+        productList = productQuery.list();
         session.close();
-        return productQuery.list();
+        return productList;
     }
 
-    public List<Product> filterByPrice(double min)throws Exception {
+    public List<Product> filteredByPrice(double min)throws Exception {
         if (min >= 0) {
             session = sessionFactory.openSession();
             Query<Product> productQuery = session.createQuery("from Product where price > :min");
@@ -66,7 +68,7 @@ public class ProductService extends BaseService implements Repository<Product> {
         throw new Exception("error value");
     }
 
-    public List<Product> filterByDate(Date min, Date max) throws Exception{
+    public List<Product> filteredByDate(Date min, Date max) throws Exception{
         if(min.before(max)){
             session = sessionFactory.openSession();
             Query<Product> productQuery = session.createQuery("from Product where Date >= :min and Date <= :max");
@@ -76,5 +78,74 @@ public class ProductService extends BaseService implements Repository<Product> {
             return productQuery.list();
         }
         throw new Exception("error date");
+    }
+
+    public List<Product> filteredByStockMax(int max)throws Exception {
+        if (max >= 0) {
+            session = sessionFactory.openSession();
+            Query<Product> productQuery = session.createQuery("from Product where Stock < :max");
+            productQuery.setParameter("max", max);
+             session.close();
+            return productQuery.list();
+        }
+        throw new Exception("error value");
+    }
+
+    public double StockValue(String brand) {
+            session = sessionFactory.openSession();
+            Query<Double> query = session.createQuery("select sum(Stock)from Product where brand = :brand ");
+            query.setParameter("brand", brand);
+            double value = query.uniqueResult();
+             session.close();
+            return value;
+
+    }
+
+
+    public double avgPrice() {
+            session = sessionFactory.openSession();
+            Query<Double> query =  session.createQuery("select avg(price)from Product ");
+            double average = query.uniqueResult();
+            session.close();
+            return average;
+        }
+
+
+    public List<Product> filteredByBrand(List<String> brands)throws Exception {
+        if (brands.size() > 0) {
+            session = sessionFactory.openSession();
+            Query<Product> productQuery = session.createQuery("from Product where brand in :brands");
+            productQuery.setParameter("brands", brands);
+            List<Product> productList = productQuery.list();
+            session.getTransaction().commit();
+            session.close();
+            return productList;
+        }
+        throw new Exception("error");
+    }
+
+    public boolean deleteByBrand(String brand)throws Exception{
+        if(brand != null) {
+            session = sessionFactory.openSession();
+            Query query = session.createQuery("select sum(Stock)from Product where brand = :brand ");
+            query.setParameter("brand", brand);
+            session.getTransaction().begin();
+            int nbrows = query.executeUpdate();
+            session.getTransaction().commit();
+            session.close();
+            return nbrows > 0;
+        }
+        throw new Exception("error");
+    }
+
+    public void begin(){
+
+        session = sessionFactory.openSession();
+
+    }
+
+    public void end(){
+        //session.close();
+        sessionFactory.close();
     }
 }
