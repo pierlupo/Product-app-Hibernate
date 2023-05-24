@@ -127,7 +127,7 @@ public class ProductService extends BaseService implements Repository<Product> {
     public boolean deleteByBrand(String brand)throws Exception{
         if(brand != null) {
             session = sessionFactory.openSession();
-            Query query = session.createQuery("select sum(Stock)from Product where brand = :brand ");
+            Query query = session.createQuery("select sum(Stock)from Product where brand =:brand ");
             query.setParameter("brand", brand);
             session.getTransaction().begin();
             int nbrows = query.executeUpdate();
